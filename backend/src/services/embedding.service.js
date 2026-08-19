@@ -1,30 +1,35 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai")
-require('dotenv').config();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is missing in .env");
+}
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const embeddingModel = genAI.getGenerativeModel({
-    model: "gemini-embedding-2"
-})
+    model: 'gemini-embedding-2',
+});
 
-// Single text -> embedding
+// Single text -> one embedding vector
 const generateEmbedding = async (text) => {
     const result = await embeddingModel.embedContent(text);
     return result.embedding.values;
-}
+};
 
-// Multiple texts -> embeddings
+// Multiple texts -> array of embeddings
 const generateEmbeddings = async (texts) => {
-    const embedding = [];
+    const embeddings = [];
 
     for (let i = 0; i < texts.length; i++) {
-        console.log(`GENEARTING EMBEDDING ${i + 1}/${texts.length}...`)
-        const embedding = await generateEmbedding(texts[i]);
-        embeddings.push(embedding);
+        console.log(`Generating embedding ${i + 1}/${texts.length}...`);
+        const vector = await generateEmbedding(texts[i]);
+        embeddings.push(vector);
     }
+
     return embeddings;
-}
+};
 
 module.exports = {
     generateEmbedding,
-    generateEmbeddings
-}
+    generateEmbeddings,
+};

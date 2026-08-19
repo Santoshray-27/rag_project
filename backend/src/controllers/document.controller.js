@@ -1,4 +1,9 @@
 const { extractTextFromPDF } = require("../services/pdf.service");
+const { generateEmbeddings } = require("../services/embedding.service");
+const {
+  addDocument,
+  getDocuments,
+} = require("../services/vectorstore.service");
 
 const uploadDocument = async (req, res) => {
   try {
@@ -11,32 +16,40 @@ const uploadDocument = async (req, res) => {
 
     console.log("File received:", req.file.originalname);
 
+    // Step 1: Extract + clean + chunk
     const extracted = await extractTextFromPDF(req.file.path, {
       chunkSize: 500,
       overlap: 100,
     });
 
+    console.log(`Total chunks: ${extracted.totalChunks}`);
+
+    // Step 2: Generate embeddings for chunk texts
+    const chunkTexts = extracted.chunks.map((chunk) => chunk.content);
+    const embeddings = await generateEmbeddings(chunkTexts);
+
+    console.log(`Embeddings generated: ${embeddings.length}`);
+
+    // Step 3: Store in vector store
+    const documentId = `doc_${Date.now()}`;
+
+    addDocument(
+      documentId,
+      req.file.originalname,
+      extracted.chunks,
+      embeddings
+    );
+
     return res.status(200).json({
       success: true,
-      message: "File uploaded and processed successfully",
-      file: {
-        originalName: req.file.originalname,
-        savedAs: req.file.filename,
-        size: req.file.size,
+      message: "Document uploaded and processed successfully",
+      document: {
+        documentId,
+        fileName: req.file.originalname,
+        totalChunks: extracted.totalChunks,
         pages: extracted.pages,
       },
-      processing: {
-        originalLength: extracted.rawText.length,
-        cleanedLength: extracted.cleanedText.length,
-        totalChunks: extracted.totalChunks,
-      },
-      chunksPreview: extracted.chunks.slice(0, 3).map((chunk) => ({
-        chunkIndex: chunk.chunkIndex,
-        content: chunk.content.slice(0, 200) + "...",
-        length: chunk.content.length,
-      })),
     });
-
   } catch (error) {
     console.error("Upload error:", error.message);
     return res.status(500).json({
@@ -46,6 +59,25 @@ const uploadDocument = async (req, res) => {
   }
 };
 
+const getAllDocuments = async (req, res) => {
+  try {
+    const documents = getDocuments();
+
+    return res.status(200).json({
+      success: true,
+      documents,
+      total: documents.length,
+    });
+  } catch (error) {
+    console.error("Get documents error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadDocument,
+  getAllDocuments,
 };
