@@ -1,34 +1,38 @@
-require('dotenv').config();
-const express = require('express')
-const cors = require('cors')
+require("dotenv").config();
 
+const express = require("express");
+const cors = require("cors");
 
-const healthRoutes = require('./routes/health.route')
-const errorHandler = require('./middleware/error.middleware')
-
+const healthRoutes = require("./routes/health.routes");
+const documentRoutes = require("./routes/document.routes");
+const errorHandler = require("./middleware/error.middleware");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
-// Middleware
+// ─── Middleware ────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/health', healthRoutes);
+// ─── Routes ───────────────────────────────────────
+app.use("/api/health", healthRoutes);
+app.use("/api/documents", documentRoutes);
 
-// Root route
+// ─── Root ─────────────────────────────────────────
 app.get("/", (req, res) => {
   res.send("Welcome to DocuMind Backend");
 });
 
-// Error handling middleware
-app.use(errorHandler);
-
-// 404 handler
-app.use((req, res, next) => {
-  res.status(404).json({ success: false, error: "Route not found" });
+// ─── 404 Handler ──────────────────────────────────
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
 });
+
+// ─── Global Error Handler ─────────────────────────
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
