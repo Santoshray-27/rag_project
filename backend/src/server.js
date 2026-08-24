@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const healthRoutes = require("./routes/health.routes");
 const documentRoutes = require("./routes/document.routes");
+const searchRoutes = require("./routes/search.routes");
 const errorHandler = require("./middleware/error.middleware");
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 // ─── Routes ───────────────────────────────────────
 app.use("/api/health", healthRoutes);
 app.use("/api/documents", documentRoutes);
+app.use("/api/search", searchRoutes);
 
 // ─── Root ─────────────────────────────────────────
 app.get("/", (req, res) => {
