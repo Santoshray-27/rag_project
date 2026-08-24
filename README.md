@@ -1,60 +1,111 @@
-# DocuMind - RAG System
+# DocuMind - AI-Powered RAG Document Assistant
 
-DocuMind is a Retrieval-Augmented Generation (RAG) application that allows users to upload documents, process them into embeddings, and perform semantic similarity searches to extract relevant information.
+DocuMind is an AI-powered Retrieval-Augmented Generation (RAG) system that acts as a "ChatGPT for your own documents." Users can upload documents (like PDFs), and the system extracts, chunks, and embeds the text into a vector database. When a user asks a question, DocuMind performs a semantic similarity search to retrieve the most relevant context and generates an accurate, grounded answer with citations.
 
-## Project Structure
+---
 
-- **/backend**: Node.js and Express server handling all the core APIs (Document parsing, Embedding generation, Vector storage, and Similarity search).
-- **/frontend**: Client-side application for the user interface.
-- **/services**: Extra decoupled services for managing specific tasks.
+## 🏗️ Architecture & Project Structure
 
-## Features
+The project follows a decoupled architecture, separating the client-side UI, the main API gateway, and specialized microservices for heavy processing or AI tasks.
 
-### 1. **Similarity Search API**
-- **Endpoint**: `POST /api/search`
-- **Description**: Accepts a natural language query and returns the most relevant chunks from uploaded documents based on their semantic meaning rather than exact word matches.
-- **Under the hood**: The user's query is converted into an embedding and compared against stored document chunk embeddings using vector similarity search (like cosine similarity).
-
-### 2. **Document Upload API**
-- **Endpoint**: `POST /api/documents`
-- **Description**: Handles file uploads, extracts text, splits the text into chunks, generates embeddings, and saves them to the vector store.
-
-### 3. **Health Check API**
-- **Endpoint**: `GET /api/health`
-- **Description**: Simple ping endpoint to verify that the backend server is running successfully.
-
-## Getting Started
-
-### Prerequisites
-- [Node.js](https://nodejs.org/) installed on your machine.
-
-### Running the Backend Locally
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install the necessary dependencies (if not done yet):
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-   The backend server should now be running on `http://localhost:5000`.
-
-## Testing the APIs (Example: Semantic Search)
-You can use tools like Postman to interact with the endpoints.
-
-**POST** `http://localhost:5000/api/search`
-**Headers**: `Content-Type: application/json`
-**Body**:
-```json
-{
-  "query": "What is Santosh's email?",
-  "topK": 3
-}
+```text
+documind_rag/
+│
+├── frontend/             # React + Vite Client
+│   ├── public/
+│   └── src/              # UI Components, Pages, Context, Hooks
+│
+├── backend/              # Node.js + Express API Server
+│   └── src/
+│       ├── controllers/  # Route logic (e.g., search.controller.js)
+│       ├── middleware/   # Express middleware
+│       ├── routes/       # API endpoints (e.g., search.routes.js, document.routes.js)
+│       └── services/     # Business logic & interactions with Python services
+│
+└── services/             # Python FastAPI / AI Services
+    └── venv/             # Python Virtual Environment
 ```
 
-**Expected Result**:
-You will receive a JSON response containing an array of `results` with the chunks of text that match the meaning of your query, along with their similarity scores.
+---
+
+## 🚀 Tech Stack
+
+### **Frontend**
+- **Framework:** React
+- **Build Tool:** Vite
+
+### **Backend**
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Architecture:** REST APIs
+
+### **AI & Data Processing (Services)**
+- **Framework:** FastAPI (Python)
+- **Validation:** Pydantic
+- **Server:** Uvicorn
+- **Capabilities:** Embeddings generation, Text Chunking, Vector Storage, Semantic Search, and LLM Integration.
+
+---
+
+## 🎯 Core Features
+
+### 1. **Document Processing (Ingestion)**
+- **Upload:** Accepts PDF and text documents.
+- **Extraction & Cleaning:** Extracts readable text and cleans formatting.
+- **Chunking:** Splits large documents into smaller, meaningful segments for better retrieval.
+
+### 2. **Knowledge Base (Vector DB)**
+- **Embeddings:** Converts text chunks into numerical vectors (semantic representation).
+- **Storage:** Stores chunks, embeddings, and metadata in a Vector Database.
+
+### 3. **Retrieval-Augmented Generation (RAG)**
+- **Semantic Search:** Converts user questions into embeddings and retrieves the Top-K most relevant document chunks based on meaning (not just exact keyword match).
+- **LLM Grounding:** Sends the retrieved context along with the question to an LLM to generate an accurate answer.
+- **Citations:** Provides source document and page references for the generated answers.
+
+---
+
+## 🚦 Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v16+)
+- [Python](https://www.python.org/) (v3.9+)
+
+### 1. Setup Backend (Node/Express)
+```bash
+cd backend
+npm install
+npm run dev
+```
+*Runs on http://localhost:5000*
+
+### 2. Setup Frontend (React/Vite)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*Runs on http://localhost:5173*
+
+### 3. Setup AI Services (Python/FastAPI)
+```bash
+cd services
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# Mac/Linux:
+# source venv/bin/activate
+
+# Start the Python service (adjust command based on your entry file)
+uvicorn main:app --reload
+```
+
+---
+
+## 🧠 Learning Goals of this Project
+DocuMind is built as an educational vehicle to master:
+- Full Stack Development (MERN/PERN architecture)
+- System Design & API separation
+- The mathematics and implementation of Embeddings and Vector Search
+- LLM Prompts, Context Windows, and reducing Hallucinations through RAG
+- Software Engineering best practices (Clean Code, Git workflows, Authentication, Deployment)
