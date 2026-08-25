@@ -22,7 +22,7 @@ app.use("/api/search", searchRoutes);
 
 // ─── Root ─────────────────────────────────────────
 app.get("/", (req, res) => {
-  res.send("Welcome to DocuMind Backend");
+  res.send("Welcome to DocuMind Backend API v1.0");
 });
 
 // ─── 404 Handler ──────────────────────────────────
