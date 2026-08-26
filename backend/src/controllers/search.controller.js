@@ -43,3 +43,5 @@ const searchDocuments = async (req, res) => {
 module.exports = {
   searchDocuments,
 };
+
+// Search Controller Ready
