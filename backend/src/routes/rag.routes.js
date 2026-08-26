@@ -7,3 +7,5 @@ const { askDocument } = require("../controllers/rag.controller");
 router.post("/ask", askDocument);
 
 module.exports = router;
+
+// RAG API endpoints
