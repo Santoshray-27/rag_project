@@ -11,3 +11,4 @@ router.post("/upload", upload.single("file"), uploadDocument);
 router.get("/", getAllDocuments);
 
 module.exports = router;
+// Document Management Endpoints
