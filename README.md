@@ -109,3 +109,5 @@ DocuMind is built as an educational vehicle to master:
 - The mathematics and implementation of Embeddings and Vector Search
 - LLM Prompts, Context Windows, and reducing Hallucinations through RAG
 - Software Engineering best practices (Clean Code, Git workflows, Authentication, Deployment)
+
+<!-- End of README -->
