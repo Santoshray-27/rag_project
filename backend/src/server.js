@@ -6,6 +6,7 @@ const cors = require("cors");
 const healthRoutes = require("./routes/health.routes");
 const documentRoutes = require("./routes/document.routes");
 const searchRoutes = require("./routes/search.routes");
+const ragRoutes = require("./routes/rag.routes");
 const errorHandler = require("./middleware/error.middleware");
 
 const app = express();
@@ -19,10 +20,11 @@ app.use(express.json());
 app.use("/api/health", healthRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/rag", ragRoutes);
 
 // ─── Root ─────────────────────────────────────────
 app.get("/", (req, res) => {
-  res.send("Welcome to DocuMind Backend API v1.0");
+  res.send("Welcome to DocuMind Backend");
 });
 
 // ─── 404 Handler ──────────────────────────────────
