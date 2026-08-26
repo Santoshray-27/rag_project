@@ -7,3 +7,5 @@ const { searchDocuments } = require("../controllers/search.controller");
 router.post("/", searchDocuments);
 
 module.exports = router;
+
+// Similarity Search Endpoints
