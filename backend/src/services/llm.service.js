@@ -6,9 +6,9 @@ if (!process.env.GEMINI_API_KEY) {
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Fast, accurate and free-tier friendly model
+// Use gemini-2.5-flash as the previous one was giving 503 High Demand
 const generativeModel = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-2.5-flash",
 });
 
 /**
