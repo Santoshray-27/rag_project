@@ -60,3 +60,5 @@ const askDocument = async (req, res) => {
 module.exports = {
   askDocument,
 };
+
+// TODO: Add streaming support later
