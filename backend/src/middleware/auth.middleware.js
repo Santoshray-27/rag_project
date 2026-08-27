@@ -35,3 +35,5 @@ const protect = async (req, res, next) => {
 };
 
 module.exports = { protect };
+
+// Middleware ready for use
