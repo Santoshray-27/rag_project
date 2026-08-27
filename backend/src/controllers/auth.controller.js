@@ -71,3 +71,5 @@ module.exports = {
   registerUser,
   loginUser,
 };
+
+// End of Auth Controller
