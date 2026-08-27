@@ -6,9 +6,11 @@ const {
   uploadDocument,
   getAllDocuments,
 } = require("../controllers/document.controller");
+const { protect } = require("../middleware/auth.middleware");
 
-router.post("/upload", upload.single("file"), uploadDocument);
-router.get("/", getAllDocuments);
+// Apply protect middleware to these routes
+router.post("/upload", protect, upload.single("file"), uploadDocument);
+router.get("/", protect, getAllDocuments);
 
 module.exports = router;
 // Document Management Endpoints
