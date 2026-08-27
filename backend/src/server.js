@@ -8,9 +8,13 @@ const documentRoutes = require("./routes/document.routes");
 const searchRoutes = require("./routes/search.routes");
 const ragRoutes = require("./routes/rag.routes");
 const errorHandler = require("./middleware/error.middleware");
+const connectDB = require("./config/db"); // Added DB Connection
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Connect to MongoDB
+connectDB();
 
 // ─── Middleware ────────────────────────────────────
 app.use(cors());
