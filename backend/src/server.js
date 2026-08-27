@@ -7,6 +7,7 @@ const healthRoutes = require("./routes/health.routes");
 const documentRoutes = require("./routes/document.routes");
 const searchRoutes = require("./routes/search.routes");
 const ragRoutes = require("./routes/rag.routes");
+const authRoutes = require("./routes/auth.routes"); // Added Auth Routes
 const errorHandler = require("./middleware/error.middleware");
 const connectDB = require("./config/db"); // Added DB Connection
 
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // ─── Routes ───────────────────────────────────────
 app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRoutes); // Auth API mounted here
 app.use("/api/documents", documentRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/rag", ragRoutes);
