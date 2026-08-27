@@ -9,3 +9,5 @@ const generateToken = (id) => {
 };
 
 module.exports = generateToken;
+
+// JWT utility ready
