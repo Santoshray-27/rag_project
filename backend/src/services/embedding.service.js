@@ -33,3 +33,4 @@ module.exports = {
     generateEmbedding,
     generateEmbeddings,
 };
+// Embedding service optimized
