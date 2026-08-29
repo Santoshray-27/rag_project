@@ -10,3 +10,5 @@ router.post("/ask", protect, askDocument);
 module.exports = router;
 
 // RAG API endpoints
+
+// RAG endpoints active
