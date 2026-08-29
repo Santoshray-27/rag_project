@@ -49,3 +49,5 @@ app.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
 // End of Express App Setup
+
+// App initialization complete
