@@ -53,3 +53,5 @@ module.exports = User;
 // User Model fully configured
 
 // User Model fully configured
+
+// User schema finalized
