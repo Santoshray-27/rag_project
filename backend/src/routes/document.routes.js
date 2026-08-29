@@ -14,3 +14,5 @@ router.get("/", protect, getAllDocuments);
 
 module.exports = router;
 // Document Management Endpoints
+
+// Document routes finalized
