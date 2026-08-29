@@ -10,3 +10,5 @@ router.post("/", protect, searchDocuments);
 module.exports = router;
 
 // Similarity Search Endpoints
+
+// Search endpoints verified
