@@ -81,3 +81,5 @@ module.exports = {
 // End of Auth Controller
 
 // End of Auth Controller
+
+// Auth controller reviewed
