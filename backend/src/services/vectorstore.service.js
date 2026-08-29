@@ -145,3 +145,4 @@ module.exports = {
   getDocuments,
   deleteDocument,
 };
+// Vector store operations ready
