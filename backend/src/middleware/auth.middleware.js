@@ -45,3 +45,5 @@ module.exports = { protect };
 // Middleware ready for use
 
 // Middleware ready for use
+
+// Auth middleware checks passed
