@@ -1,56 +1,41 @@
-import { useState, useEffect } from "react";
+import React, { useContext } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthContext } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const ProtectedRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
 
-function App() {
-  const [status, setStatus] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const checkBackend = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/health`);
-        const data = await response.json();
-        setStatus(data);
-      } catch (err) {
-        setError("Failed to connect to the backend. Please ensure the backend server is running.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkBackend();
-  }, []);
-
+const App = () => {
   return (
-    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>DocuMind</h1>
-      <h2>Backend Status</h2>
-
-      {loading && <p>Checking backend...</p>}
-
-      {error && (
-        <p style={{ color: "red" }}>
-          Error: {error}
-        </p>
-      )}
-
-      {status && (
-        <div style={{ 
-          background: "#f0fff0", 
-          padding: "1rem", 
-          borderRadius: "8px",
-          border: "1px solid green"
-        }}>
-          <p>✅ Success: {String(status.success)}</p>
-          <p>📢 Message: {status.message}</p>
-          <p>🌍 Environment: {status.environment}</p>
-        </div>
-      )}
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
-// Main App Component
