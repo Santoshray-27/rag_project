@@ -18,8 +18,8 @@ const askDocument = async (req, res) => {
     // Step 1: Question ko embedding mein convert karo
     const queryEmbedding = await generateEmbedding(question);
 
-    // Step 2: Vector DB se top relevant chunks retrieve karo
-    const retrievedChunks = similaritySearch(queryEmbedding, topK);
+    // Step 2: Vector DB se top relevant chunks retrieve karo (Filtered by User)
+    const retrievedChunks = similaritySearch(queryEmbedding, topK, req.user._id);
 
     if (retrievedChunks.length === 0) {
       return res.status(200).json({

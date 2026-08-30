@@ -4,6 +4,7 @@ const {
   addDocument,
   getDocuments,
 } = require("../services/vectorstore.service");
+const Document = require("../models/document.model"); // Added Document Model
 
 const uploadDocument = async (req, res) => {
   try {
@@ -30,15 +31,25 @@ const uploadDocument = async (req, res) => {
 
     console.log(`Embeddings generated: ${embeddings.length}`);
 
-    // Step 3: Store in vector store
+    // Step 3: Store in vector store (pass req.user._id)
     const documentId = `doc_${Date.now()}`;
 
     addDocument(
       documentId,
       req.file.originalname,
       extracted.chunks,
-      embeddings
+      embeddings,
+      req.user._id
     );
+
+    // Step 4: Save record to MongoDB
+    await Document.create({
+      userId: req.user._id,
+      documentId: documentId,
+      fileName: req.file.originalname,
+      totalChunks: extracted.totalChunks,
+      pages: extracted.pages,
+    });
 
     return res.status(200).json({
       success: true,
@@ -61,7 +72,8 @@ const uploadDocument = async (req, res) => {
 
 const getAllDocuments = async (req, res) => {
   try {
-    const documents = getDocuments();
+    // Fetch only this user's documents
+    const documents = getDocuments(req.user._id);
 
     return res.status(200).json({
       success: true,

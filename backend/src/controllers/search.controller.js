@@ -19,8 +19,8 @@ const searchDocuments = async (req, res) => {
 
     console.log("Query embedding generated");
 
-    // Step 2: Search similar chunks
-    const results = similaritySearch(queryEmbedding, topK);
+    // Step 2: Search vector store for top K matching chunks (Filtered by User)
+    const results = similaritySearch(queryEmbedding, topK, req.user._id);
 
     console.log(`Found ${results.length} relevant chunks`);
 

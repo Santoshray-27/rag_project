@@ -31,7 +31,7 @@ const saveVectorStore = (store) => {
 };
 
 // Add document chunks + embeddings to store
-const addDocument = (documentId, fileName, chunks, embeddings) => {
+const addDocument = (documentId, fileName, chunks, embeddings, userId) => {
   const store = loadVectorStore();
 
   // Remove existing entries for this document
@@ -45,6 +45,7 @@ const addDocument = (documentId, fileName, chunks, embeddings) => {
       id: `${documentId}_chunk_${index}`,
       documentId: documentId,
       fileName: fileName,
+      userId: userId.toString(), // Associate with user
       chunkIndex: chunk.chunkIndex,
       content: chunk.content,
       embedding: embeddings[index],
@@ -78,15 +79,25 @@ const cosineSimilarity = (vecA, vecB) => {
 };
 
 // Search similar chunks for a query embedding
-const similaritySearch = (queryEmbedding, topK = 5) => {
+const similaritySearch = (queryEmbedding, topK = 5, userId = null) => {
   const store = loadVectorStore();
 
   if (store.documents.length === 0) {
     return [];
   }
 
+  // Filter documents by userId if provided
+  let filteredDocs = store.documents;
+  if (userId) {
+    filteredDocs = store.documents.filter((doc) => doc.userId === userId.toString());
+  }
+
+  if (filteredDocs.length === 0) {
+    return [];
+  }
+
   // Calculate similarity for each chunk
-  const results = store.documents.map((doc) => ({
+  const results = filteredDocs.map((doc) => ({
     ...doc,
     similarity: cosineSimilarity(queryEmbedding, doc.embedding),
   }));
@@ -105,11 +116,16 @@ const similaritySearch = (queryEmbedding, topK = 5) => {
 };
 
 // Get all documents list
-const getDocuments = () => {
+const getDocuments = (userId = null) => {
   const store = loadVectorStore();
 
+  let filteredDocs = store.documents;
+  if (userId) {
+    filteredDocs = store.documents.filter((doc) => doc.userId === userId.toString());
+  }
+
   const docs = {};
-  store.documents.forEach((doc) => {
+  filteredDocs.forEach((doc) => {
     if (!docs[doc.documentId]) {
       docs[doc.documentId] = {
         documentId: doc.documentId,
@@ -125,12 +141,18 @@ const getDocuments = () => {
 };
 
 // Delete a document
-const deleteDocument = (documentId) => {
+const deleteDocument = (documentId, userId = null) => {
   const store = loadVectorStore();
   const before = store.documents.length;
 
   store.documents = store.documents.filter(
-    (doc) => doc.documentId !== documentId
+    (doc) => {
+      // If userId is provided, ensure we only delete if it matches
+      if (userId && doc.documentId === documentId) {
+        return doc.userId !== userId.toString();
+      }
+      return doc.documentId !== documentId;
+    }
   );
 
   const deleted = before - store.documents.length;
@@ -145,4 +167,3 @@ module.exports = {
   getDocuments,
   deleteDocument,
 };
-// Vector store operations ready
