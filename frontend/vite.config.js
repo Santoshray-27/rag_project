@@ -7,3 +7,5 @@ export default defineConfig({
 })
 
 // Vite configuration ready
+
+// Vite configuration ready
