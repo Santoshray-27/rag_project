@@ -39,3 +39,5 @@ const App = () => {
 };
 
 export default App;
+
+// Main App Component
