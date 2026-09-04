@@ -4,3 +4,5 @@ uploads/*
 !uploads/.gitkeep
 data/
 # End of gitignore
+
+# End of gitignore
