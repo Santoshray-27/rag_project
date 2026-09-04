@@ -14,3 +14,5 @@ module.exports = router;
 // Search endpoints verified
 
 // Similarity Search Endpoints
+
+// Similarity Search Endpoints
